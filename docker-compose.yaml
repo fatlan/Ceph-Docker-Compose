@@ -1,0 +1,193 @@
+version: "3"
+services:
+
+  ceph-mon:
+    container_name: ceph-mon
+    restart: always
+    image: ceph/daemon:v3.1.0-stable-3.1-mimic-centos-7
+    command: mon
+    environment:
+      MON_IP: 192.168.55.2
+      CEPH_PUBLIC_NETWORK: 192.168.55.0/24
+      LANG: en_US.utf8
+      TZ: UTC
+    volumes:
+      - ceph-conf-volume:/etc/ceph
+      - ceph-lib-volume:/var/lib/ceph/
+    networks:
+      - ceph-net
+
+  ceph-mgr:
+    container_name: ceph-mgr
+    restart: always
+    image: ceph/daemon:v3.1.0-stable-3.1-mimic-centos-7
+    command: mgr
+    environment:
+      LANG: en_US.utf8
+      TZ: UTC
+    volumes:
+      - ceph-conf-volume:/etc/ceph
+      - ceph-lib-volume:/var/lib/ceph/
+    depends_on:
+      - ceph-mon
+    networks:
+      - ceph-net
+    ports:
+      - 8443:8443
+#      - 8080:8080
+
+  ceph-osd1:
+    pid: host
+    privileged: true
+    container_name: ceph-osd1
+    image: ceph/daemon:v3.1.0-stable-3.1-mimic-centos-7
+    command: osd_directory
+    restart: always
+    environment:
+      LANG: en_US.utf8
+      TZ: UTC
+    volumes:
+      - ceph-conf-volume:/etc/ceph
+      - ceph-lib-volume:/var/lib/ceph/
+      - ceph-osd1-volume:/var/lib/ceph/osd
+    depends_on:
+      - ceph-mon
+    networks:
+      - ceph-net
+
+  ceph-osd2:
+    pid: host
+    privileged: true
+    container_name: ceph-osd2
+    image: ceph/daemon:v3.1.0-stable-3.1-mimic-centos-7
+    command: osd_directory
+    restart: always
+    environment:
+      LANG: en_US.utf8
+      TZ: UTC
+    volumes:
+      - ceph-conf-volume:/etc/ceph
+      - ceph-lib-volume:/var/lib/ceph/
+      - ceph-osd2-volume:/var/lib/ceph/osd
+    depends_on:
+      - ceph-mon
+    networks:
+      - ceph-net
+
+  ceph-osd3:
+    pid: host
+    privileged: true
+    container_name: ceph-osd3
+    image: ceph/daemon:v3.1.0-stable-3.1-mimic-centos-7
+    command: osd_directory
+    restart: always
+    environment:
+      LANG: en_US.utf8
+      TZ: UTC
+    volumes:
+      - ceph-conf-volume:/etc/ceph
+      - ceph-lib-volume:/var/lib/ceph/
+      - ceph-osd3-volume:/var/lib/ceph/osd
+    depends_on:
+      - ceph-mon
+    networks:
+      - ceph-net
+
+  ceph-rgw:
+    container_name: ceph-rgw
+    image: ceph/daemon:v3.1.0-stable-3.1-mimic-centos-7
+    command: rgw
+    restart: always
+    environment:
+      LANG: en_US.utf8
+      TZ: UTC
+    volumes:
+      - ceph-conf-volume:/etc/ceph
+      - ceph-lib-volume:/var/lib/ceph/
+    depends_on:
+      - ceph-osd1
+      - ceph-osd2
+      - ceph-osd3
+    networks:
+      - ceph-net
+    ports:
+      - 7480:7480
+
+  ceph-mds:
+    image: ceph/daemon:v3.1.0-stable-3.1-mimic-centos-7
+    command: mds
+    #hostname: ceph-mds
+    container_name: ceph-mds
+    restart: always
+    environment:
+      CEPHFS_CREATE: 1
+      LANG: en_US.utf8
+      TZ: UTC
+    volumes:
+      - ceph-conf-volume:/etc/ceph
+      - ceph-lib-volume:/var/lib/ceph/
+    depends_on:
+      - ceph-osd1
+      - ceph-osd2
+      - ceph-osd3
+    networks:
+      - ceph-net
+
+  ceph-rbd:
+    container_name: ceph-rbd
+    image: ceph/daemon:v3.1.0-stable-3.1-mimic-centos-7
+    command: rbd_mirror
+    restart: always
+    environment:
+      LANG: en_US.utf8
+      TZ: UTC
+    volumes:
+      - ceph-conf-volume:/etc/ceph
+      - ceph-lib-volume:/var/lib/ceph/
+    depends_on:
+      - ceph-osd1
+      - ceph-osd2
+      - ceph-osd3
+    networks:
+      - ceph-net
+
+volumes:
+  ceph-conf-volume:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/ceph_conf/
+  ceph-lib-volume:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/ceph_data/
+  ceph-osd1-volume:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/osds/osd1/
+  ceph-osd2-volume:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/osds/osd2/
+  ceph-osd3-volume:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/osds/osd3/
+
+
+networks:
+  ceph-net:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.55.0/24
+

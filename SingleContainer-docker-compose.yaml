@@ -1,0 +1,56 @@
+version: "3"
+services:
+
+   ceph:
+     container_name: ceph-s3
+     image: ceph/daemon:v3.1.0-stable-3.1-mimic-centos-7
+     restart: always
+     pid: "host"
+     privileged: true
+     user: root
+     hostname: ceph-s3
+     LANG: en_US.utf8
+     TZ: UTC
+     volumes:
+       - ./ceph_conf:/etc/ceph
+       - ./ceph_data:/var/lib/ceph
+       - ./osd:/var/lib/ceph/osd
+     command: mon
+     command: mgr
+     command: osd_directory
+     command: rgw
+     environment:
+       - customize-failure-domain=true
+       - RGW_FRONTEND_PORT=7480
+       - SREE_PORT=5001
+       - RGW_CIVETWEB_PORT=7480
+       - EXPOSED_IP=127.0.0.1
+       - DEBUG=verbose
+       - CEPH_DEMO_UID=denemepoc
+       - MON_IP=127.0.0.1
+       - CEPH_PUBLIC_NETWORK=0.0.0.0/0
+       - CEPH_DAEMON=demo
+       - DEMO_DAEMONS=mon,mgr,osd,rgw
+       - SREE_VERSION=v0.1
+       - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+       - CEPH_VERSION=mimic
+       - CEPH_POINT_RELEASE=
+       - CEPH_DEVEL=false
+       - CEPH_REF=mimic
+       - OSD_FLAVOR=default
+     ports:
+       - 7480:7480
+#       - 8080:8080
+       - 8443:8443
+       - 5001:5001
+     networks:
+       - ceph-net
+
+networks:
+  ceph-net:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.105.0/24
+                                                                                                                                                                                             69,1          Bot
+
