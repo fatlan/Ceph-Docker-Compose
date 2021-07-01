@@ -12,7 +12,7 @@ docker-compose up -d ceph-mon ceph-mgr
 docker-compose up -d ceph-osd1 ceph-osd2 ceph-osd3
 ~~~
 ~~~
-docker-compose up -d ceph-rgw ceph-mds ceph-rbd ya da  docker-compose up -d
+docker-compose up -d ceph-rgw ceph-mds ceph-rbd ||  docker-compose up -d
 ~~~
 ~~~
 ./run_cd.sh
