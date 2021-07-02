@@ -26,4 +26,13 @@ watch docker-compose ps
 sudo ./del.sh
 ~~~
 
+#### Kurulum bitiminde aşağıdaki gibi dashboard ekranına login olabilirsiniz.
+~~~
+https://host_ip:8443
+~~~
+~~~
+kullanıcıadı= admin
+şifre= admin
+~~~
+
 ref: [1](https://github.com/VasiliyLiao/ceph-docker-compose)|[2](http://www.dev-share.top/2019/12/24/docker-compose-%E9%83%A8%E7%BD%B2ceph%E9%9B%86%E7%BE%A4/)
