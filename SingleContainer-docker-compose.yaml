@@ -26,7 +26,7 @@ services:
        - RGW_CIVETWEB_PORT=7480
        - EXPOSED_IP=127.0.0.1
        - DEBUG=verbose
-       - CEPH_DEMO_UID=denemepoc
+       - CEPH_DEMO_UID=rgwuser
        - MON_IP=127.0.0.1
        - CEPH_PUBLIC_NETWORK=0.0.0.0/0
        - CEPH_DAEMON=demo
