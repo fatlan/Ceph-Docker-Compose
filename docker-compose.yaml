@@ -191,3 +191,7 @@ networks:
       config:
         - subnet: 192.168.55.0/24
 
+#networks:
+#  default:
+#    external:
+#      name: "docker_bridge_name"
