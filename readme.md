@@ -3,6 +3,9 @@
 #### Aşağıdaki adımları sırasıyla takip ederek ortamı ayağa kaldırabilirsiniz
 
 ~~~
+./first_run.sh
+~~~
+~~~
 docker-compose up -d ceph-mon ceph-mgr
 ~~~
 ~~~
