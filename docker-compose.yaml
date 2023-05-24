@@ -15,7 +15,8 @@ services:
       - ceph-conf-volume:/etc/ceph
       - ceph-lib-volume:/var/lib/ceph/
     networks:
-      - ceph-net
+      ceph-net:
+        ipv4_address: "192.168.55.2"
 
   ceph-mgr:
     container_name: ceph-mgr
@@ -31,7 +32,8 @@ services:
     depends_on:
       - ceph-mon
     networks:
-      - ceph-net
+      ceph-net:
+        ipv4_address: "192.168.55.3"
     ports:
       - 8443:8443
 #      - 8080:8080
@@ -53,7 +55,8 @@ services:
     depends_on:
       - ceph-mon
     networks:
-      - ceph-net
+      ceph-net:
+        ipv4_address: "192.168.55.4"
 
   ceph-osd2:
     pid: host
@@ -72,7 +75,8 @@ services:
     depends_on:
       - ceph-mon
     networks:
-      - ceph-net
+      ceph-net:
+        ipv4_address: "192.168.55.5"
 
   ceph-osd3:
     pid: host
@@ -91,7 +95,8 @@ services:
     depends_on:
       - ceph-mon
     networks:
-      - ceph-net
+      ceph-net:
+        ipv4_address: "192.168.55.6"
 
   ceph-rgw:
     container_name: ceph-rgw
@@ -109,7 +114,8 @@ services:
       - ceph-osd2
       - ceph-osd3
     networks:
-      - ceph-net
+      ceph-net:
+        ipv4_address: "192.168.55.7"
     ports:
       - 7480:7480
 
@@ -131,7 +137,8 @@ services:
       - ceph-osd2
       - ceph-osd3
     networks:
-      - ceph-net
+      ceph-net:
+        ipv4_address: "192.168.55.8"
 
   ceph-rbd:
     container_name: ceph-rbd
@@ -149,7 +156,8 @@ services:
       - ceph-osd2
       - ceph-osd3
     networks:
-      - ceph-net
+      ceph-net:
+        ipv4_address: "192.168.55.9"
 
 volumes:
   ceph-conf-volume:
