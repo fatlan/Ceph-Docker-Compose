@@ -1,8 +1,8 @@
 set -x
-mkdir ceph_conf
-mkdir ceph_data
-mkdir osds
-mkdir osds/osd1
-mkdir osds/osd2
-mkdir osds/osd3
+mkdir -p ceph_conf
+mkdir -p ceph_data
+mkdir -p osds
+mkdir -p osds/osd1
+mkdir -p osds/osd2
+mkdir -p osds/osd3
 set +x
